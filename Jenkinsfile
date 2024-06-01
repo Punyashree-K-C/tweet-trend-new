@@ -5,7 +5,7 @@ pipeline {
         }
     }
     environment {
-        JAVA_HOME = '/path/to/jdk-17'  // Set this to the actual path of JDK 17
+        JAVA_HOME = '/usr/bin/java'  // Set this to the actual path of JDK 17
         PATH = "${JAVA_HOME}/bin:/opt/apache-maven-3.9.7/bin:${env.PATH}"
     }
     stages {
