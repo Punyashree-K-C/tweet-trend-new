@@ -4,25 +4,25 @@ pipeline {
             label 'maven'
         }
     }
-environment {
-    PATH = "/opt/apache-maven-3.9.7/bin:$PATH"
-}
+    environment {
+        JAVA_HOME = '/path/to/jdk-17'  // Set this to the actual path of JDK 17
+        PATH = "${JAVA_HOME}/bin:/opt/apache-maven-3.9.7/bin:${env.PATH}"
+    }
     stages {
-        stage("build"){
+        stage('Build') {
             steps {
                 sh 'mvn clean deploy'
             }
         }
-
-    stage('SonarQube analysis') {
-    environment {
-        scannerHome = tool 'galaxy-sonar-scanner'
+        stage('SonarQube analysis') {
+            environment {
+                scannerHome = tool 'galaxy-sonar-scanner'
+            }
+            steps {
+                withSonarQubeEnv('galaxy-sonarqube-server') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
     }
-    steps {
-    withSonarQubeEnv('galaxy-sonarqube-server') { // If you have configured more than one global server connection, you can specify its name
-      sh "${scannerHome}/bin/sonar-scanner"
-    }
-    }
-  }
-}
 }
