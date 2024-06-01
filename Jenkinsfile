@@ -5,10 +5,15 @@ pipeline {
         }
     }
     environment {
-        JAVA_HOME = '/usr/bin/java'  // Set this to the actual path of JDK 17
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
         PATH = "${JAVA_HOME}/bin:/opt/apache-maven-3.9.7/bin:${env.PATH}"
     }
     stages {
+        stage('Verify Java Version') {
+            steps {
+                sh 'java -version'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'mvn clean deploy'
