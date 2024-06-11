@@ -26,8 +26,8 @@ environment {
                     sh 'echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin'
                 }
                 // Tag and push the Docker image
-                sh 'docker tag ttrend-app:latest onkark1949/ttrend-app:latest'
-                sh 'docker push onkark1949/ttrend-app:latest'
+                sh 'docker tag ttrend-app:latest punya7899/ttrend-app:latest'
+                sh 'docker push punya7899/ttrend-app:latest'
             }
         }
 
