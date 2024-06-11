@@ -13,16 +13,25 @@ environment {
                 sh 'mvn clean deploy'
             }
         }
-    stage('SonarQube analysis') {
-    environment {
-      scannerHome = tool 'galaxy-sonar-scanner'
+    stage('Build Docker Image') {
+            steps {
+                // Build the Docker image
+                sh 'docker build -t ttrend-app:latest .'
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                // Login to Docker Hub (use Jenkins credentials)
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
+                    sh 'echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin'
+                }
+                // Tag and push the Docker image
+                sh 'docker tag ttrend-app:latest onkark1949/ttrend-app:latest'
+                sh 'docker push onkark1949/ttrend-app:latest'
+            }
+        }
+
+
     }
-    steps{
-    withSonarQubeEnv('galaxy-sonarqube-server') { // If you have configured more than one global server connection, you can specify its name
-      sh "${scannerHome}/bin/sonar-scanner"
-    }
-    }
-  }
 }
-}   
         
